@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Syllabus - SGBAU MSc CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --imp: #f59e0b;
+    --mod: #3b82f6;
+    --low: #6b7280;
+    --red: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated BG */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(0,212,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+  /* Legend */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 32px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  .legend-title { color: var(--muted); margin-right: 4px; font-family: 'Space Mono', monospace; font-size: 11px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 10px; font-weight: 600; font-family: 'Space Mono', monospace;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  .badge.imp { background: rgba(245,158,11,0.15); color: var(--imp); border: 1px solid rgba(245,158,11,0.35); }
+  .badge.mod { background: rgba(59,130,246,0.15); color: var(--mod); border: 1px solid rgba(59,130,246,0.35); }
+  .badge.low { background: rgba(107,114,128,0.15); color: #9ca3af; border: 1px solid rgba(107,114,128,0.35); }
+  .badge.extra { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); font-size: 9px; }
+
+  /* Units */
+  .unit {
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .unit:hover { border-color: rgba(0,212,255,0.3); }
+
+  .unit-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+    gap: 14px;
+  }
+
+  .unit-left { display: flex; align-items: center; gap: 14px; }
+
+  .unit-num {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .unit-title { font-size: 15px; font-weight: 600; }
+  .unit-meta { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'Space Mono', monospace; }
+
+  .unit-right { display: flex; align-items: center; gap: 10px; }
+
+  .marks-pill {
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .chevron {
+    color: var(--muted);
+    transition: transform 0.3s;
+    font-size: 18px;
+  }
+
+  .unit.open .chevron { transform: rotate(180deg); }
+
+  /* Topics */
+  .topics-list {
+    display: none;
+    padding: 6px 12px 12px;
+    background: var(--surface2);
+  }
+
+  .unit.open .topics-list { display: block; }
+
+  .topic-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(30,58,95,0.5);
+    transition: background 0.2s;
+    border-radius: 8px;
+    margin-bottom: 2px;
+  }
+
+  .topic-item:last-child { border-bottom: none; }
+  .topic-item:hover { background: rgba(0,212,255,0.04); }
+
+  .topic-icon { font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+
+  .topic-body { flex: 1; min-width: 0; }
+
+  .topic-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .topic-name .bracket { color: var(--muted); font-style: italic; font-size: 11px; }
+
+  .topic-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+  .learn-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    text-decoration: none;
+    border: 1px solid;
+    transition: all 0.2s;
+  }
+
+  .learn-link.yt { color: #f87171; border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.08); }
+  .learn-link.yt:hover { background: rgba(248,113,113,0.18); }
+  .learn-link.wiki { color: #a78bfa; border-color: rgba(167,139,250,0.35); background: rgba(167,139,250,0.08); }
+  .learn-link.wiki:hover { background: rgba(167,139,250,0.18); }
+  .learn-link.gfg { color: #34d399; border-color: rgba(52,211,153,0.35); background: rgba(52,211,153,0.08); }
+  .learn-link.gfg:hover { background: rgba(52,211,153,0.18); }
+  .learn-link.mit { color: #fbbf24; border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08); }
+  .learn-link.mit:hover { background: rgba(251,191,36,0.18); }
+
+  .topic-badge-wrap { margin-left: auto; flex-shrink: 0; }
+
+  /* Colors per unit */
+  .u1 .unit-num { background: rgba(0,212,255,0.12); color: var(--accent); }
+  .u2 .unit-num { background: rgba(124,58,237,0.15); color: #a78bfa; }
+  .u3 .unit-num { background: rgba(239,68,68,0.12); color: #f87171; }
+  .u4 .unit-num { background: rgba(16,185,129,0.12); color: var(--accent3); }
+  .u5 .unit-num { background: rgba(245,158,11,0.12); color: var(--imp); }
+  .u6 .unit-num { background: rgba(236,72,153,0.12); color: #f472b6; }
+
+  /* Search */
+  .search-wrap {
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 18px 12px 42px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 16px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    flex: 1; min-width: 120px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: center;
+  }
+
+  .stat-num { font-size: 22px; font-weight: 800; font-family: 'Space Mono', monospace; }
+  .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .expand-all {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+
+  .expand-all:hover { background: rgba(0,212,255,0.15); }
+
+  @media (max-width: 600px) {
+    .topic-item { flex-direction: column; }
+    .topic-badge-wrap { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-badge"><div class="dot"></div> SGBAU · MSc Computer Science</div>
+    <h1>Operating Systems<br>Complete Syllabus Guide</h1>
+    <p class="subtitle">Sant Gadge Baba Amravati University · PG Programme · 6 Units · 60 Marks</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num" style="color:var(--imp)">28</div><div class="stat-label">⭐ Important</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--mod)">18</div><div class="stat-label">🔵 Moderate</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#9ca3af">8</div><div class="stat-label">⚪ Overview</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent)">6</div><div class="stat-label">📦 Units</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent3)">60</div><div class="stat-label">🎯 Total Marks</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="legend-title">LEGEND:</span>
+    <span class="badge imp">⭐ Important</span>
+    <span class="badge mod">🔵 Moderate</span>
+    <span class="badge low">⚪ Overview</span>
+    <span class="badge extra">[ ] Extra Reading</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--muted)">Click any unit to expand ▾</span>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" placeholder="Search topics, e.g. 'semaphore', 'paging', 'deadlock'..." id="searchInput">
+  </div>
+
+  <button class="expand-all" id="expandBtn">⊞ Expand All Units</button>
+
+  <div id="units-container"></div>
+</div>
+
+<script>
+const data = [
+  {
+    id: 'u1', num: 'I', title: 'Introduction to Operating Systems', marks: 10,
+    topics: [
+      { name: 'Services provided by OS', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=operating+system+services' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/operating-system-services/' }
+      ]},
+      { name: 'Types of Operating Systems (Batch, Time-sharing, Distributed, Real-time)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=types+of+operating+systems' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/types-of-operating-systems/' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Operating_system' }
+      ]},
+      { name: 'OS Interface: Command Interpreter (Shell)', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=command+interpreter+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/command-interpreter-in-operating-system/' }
+      ]},
+      { name: 'Graphical User Interface (GUI)', importance: 'low', links: [
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Graphical_user_interface' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=GUI+operating+system+concepts' }
+      ]},
+      { name: 'System Calls — Types and Examples', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=system+calls+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/introduction-of-system-call/' },
+        { type:'mit', label:'MIT Notes', url:'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/pages/lecture-notes/' }
+      ]},
+      { name: 'System Programs', importance: 'low', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/system-programs-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=system+programs+OS' }
+      ]},
+      { name: 'OS Structure: Simple / Monolithic Structure', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=monolithic+operating+system+structure' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/monolithic-kernel-and-key-differences-from-microkernel/' }
+      ]},
+      { name: 'Layered Approach of OS', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=layered+approach+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/layered-structure-of-operating-system/' }
+      ]},
+      { name: 'Micro-kernels', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=microkernel+operating+system' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Microkernel' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/microkernel-in-operating-systems/' }
+      ]},
+      { name: 'Modules in OS', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/modules-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=modules+operating+system+structure' }
+      ]},
+      { name: 'Virtual Machine — Concept', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=virtual+machine+operating+system' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Virtual_machine' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/virtual-machine/' }
+      ]},
+      { name: 'System Boot Process', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=system+boot+process+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/boot-block-in-operating-system/' }
+      ]},
+    ]
+  },
+  {
+    id: 'u2', num: 'II', title: 'Process Management & CPU Scheduling', marks: 10,
+    topics: [
+      { name: 'Process Concept — Definition & Components', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=process+concept+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/introduction-of-process-management/' }
+      ]},
+      { name: 'Process States (New, Ready, Running, Waiting, Terminated)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=process+states+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/states-of-a-process-in-operating-systems/' }
+      ]},
+      { name: 'Process Control Block (PCB)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=process+control+block+PCB' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/process-control-block-pcb-in-operating-system/' }
+      ]},
+      { name: 'Process Scheduling: Long-term, Short-term, Medium-term Schedulers', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=process+scheduling+schedulers+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/types-of-process-schedulers-in-operating-system/' }
+      ]},
+      { name: 'Context Switch', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=context+switch+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/context-switch-in-operating-system/' }
+      ]},
+      { name: 'Process Creation & Termination (fork, exec, wait)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=process+creation+termination+fork+exec' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/process-creation-in-operating-system/' }
+      ]},
+      { name: 'Inter-Process Communication (IPC): Shared Memory & Message Passing', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=inter+process+communication+IPC' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/inter-process-communication-ipc/' },
+        { type:'mit', label:'MIT Notes', url:'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/' }
+      ]},
+      { name: 'Threads: Concept & Types (User vs Kernel)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=threads+in+operating+system+user+kernel' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/thread-in-operating-system/' }
+      ]},
+      { name: 'Benefits of Multithreading', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/benefits-of-multithreading-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=benefits+of+multithreading+OS' }
+      ]},
+      { name: 'CPU Scheduling: Burst Cycle (CPU-I/O Burst)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=CPU+burst+IO+burst+cycle' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/cpu-burst-and-i-o-burst-in-operating-system/' }
+      ]},
+      { name: 'Dispatcher & Dispatch Latency', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/dispatcher-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=dispatcher+dispatch+latency+OS' }
+      ]},
+      { name: 'Scheduling Criteria: CPU Utilization, Throughput, Turnaround, Waiting, Response Time', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=CPU+scheduling+criteria' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/cpu-scheduling-criteria/' }
+      ]},
+      { name: 'FCFS Scheduling Algorithm (with Gantt Chart)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=FCFS+scheduling+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/program-for-fcfs-cpu-scheduling-set-1/' }
+      ]},
+      { name: 'SJF Scheduling Algorithm (Preemptive & Non-preemptive)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=SJF+scheduling+algorithm+preemptive' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/shortest-job-first-sjf-scheduling-with-predicted-burst-time/' }
+      ]},
+      { name: 'Priority Scheduling Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=priority+scheduling+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/priority-scheduling-in-operating-system/' }
+      ]},
+      { name: 'Round-Robin Scheduling Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=round+robin+scheduling+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/program-for-round-robin-scheduling-for-the-same-arrival-time/' }
+      ]},
+      { name: 'Multiple Processor Scheduling', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/multiple-processor-scheduling-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=multiple+processor+scheduling+OS' }
+      ], extra: true},
+    ]
+  },
+  {
+    id: 'u3', num: 'III', title: 'Process Synchronization & Deadlocks', marks: 10,
+    topics: [
+      { name: 'Critical Section Problem — Requirements', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=critical+section+problem+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/g-fact-70/' }
+      ]},
+      { name: 'Synchronization Hardware (TestAndSet, Swap)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=synchronization+hardware+test+and+set' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/synchronization-hardware-operating-system/' }
+      ]},
+      { name: 'Semaphores: Binary & Counting', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=semaphores+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/semaphores-in-process-synchronization/' },
+        { type:'mit', label:'MIT Notes', url:'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/' }
+      ]},
+      { name: 'Classic Synchronization Problems: Producer-Consumer, Readers-Writers, Dining Philosophers', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=classic+synchronization+problems+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/classical-problems-of-synchronization-in-operating-system/' }
+      ]},
+      { name: 'Monitors — Concept and Structure', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=monitors+in+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/monitors-in-process-synchronization/' }
+      ]},
+      { name: 'Deadlock: System Model & Characterization (Mutual Exclusion, Hold & Wait, No Preemption, Circular Wait)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=deadlock+characterization+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/introduction-of-deadlock-in-operating-system/' }
+      ]},
+      { name: 'Resource Allocation Graph (RAG)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=resource+allocation+graph+deadlock' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/resource-allocation-graph-rag-in-operating-system/' }
+      ]},
+      { name: 'Deadlock Prevention Methods', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=deadlock+prevention+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/deadlock-prevention/' }
+      ]},
+      { name: "Deadlock Avoidance: Banker's Algorithm", importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:"https://www.youtube.com/results?search_query=banker's+algorithm+deadlock+avoidance" },
+        { type:'gfg', label:'GFG', url:"https://www.geeksforgeeks.org/bankers-algorithm-in-operating-system/" }
+      ]},
+      { name: 'Deadlock Detection Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=deadlock+detection+algorithm+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/deadlock-detection-algorithm/' }
+      ]},
+      { name: 'Recovery from Deadlock: Process Termination & Resource Preemption', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=deadlock+recovery+process+termination' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/recovery-from-deadlock-in-operating-system/' }
+      ]},
+    ]
+  },
+  {
+    id: 'u4', num: 'IV', title: 'Memory Management & Virtual Memory', marks: 10,
+    topics: [
+      { name: 'Basic Hardware & Address Binding (Compile-time, Load-time, Execution-time)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=address+binding+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/mapping-virtual-addresses-to-physical-addresses/' }
+      ], extra: true},
+      { name: 'Logical vs Physical Address Space', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=logical+physical+address+space+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/' }
+      ]},
+      { name: 'Swapping', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=swapping+in+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/swapping-in-operating-system/' }
+      ]},
+      { name: 'Contiguous Memory Allocation', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=contiguous+memory+allocation+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/contiguous-memory-allocation-operating-system/' }
+      ]},
+      { name: 'Dynamic Storage Allocation: First-Fit, Best-Fit, Worst-Fit', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=first+fit+best+fit+worst+fit+memory+allocation' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/first-fit-best-fit-and-worst-fit-memory-management/' }
+      ]},
+      { name: 'Internal & External Fragmentation', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=fragmentation+internal+external+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/fragmentation-in-operating-system/' }
+      ]},
+      { name: 'Paging — Concept, Page Table, TLB', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=paging+in+operating+system+TLB' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/paging-in-operating-system/' },
+        { type:'mit', label:'MIT Notes', url:'https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/' }
+      ]},
+      { name: 'Segmentation — Concept & Segmentation Table', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=segmentation+in+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/segmentation-in-operating-system/' }
+      ]},
+      { name: 'Virtual Memory: Introduction & Virtual Address Space', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=virtual+memory+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/virtual-memory-in-operating-system/' }
+      ]},
+      { name: 'Demand Paging & Page Fault', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=demand+paging+page+fault+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/page-fault-handling-in-operating-system/' }
+      ]},
+      { name: 'Copy-on-Write (COW)', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/copy-on-write/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=copy+on+write+OS' }
+      ]},
+      { name: 'Page Replacement: FIFO Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=FIFO+page+replacement+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/program-page-replacement-algorithms/' }
+      ]},
+      { name: 'Page Replacement: Optimal Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=optimal+page+replacement+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/optimal-page-replacement-algorithm/' }
+      ]},
+      { name: 'Page Replacement: LRU Algorithm', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=LRU+page+replacement+algorithm' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/lru-page-replacement-algorithm/' }
+      ]},
+      { name: 'Second-Chance (Clock) Page Replacement', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/second-chance-or-clock-page-replacement-policy/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=second+chance+clock+page+replacement' }
+      ]},
+      { name: 'Thrashing — Concept & Working Set Model', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=thrashing+in+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/thrashing-in-operating-system/' }
+      ]},
+      { name: 'I/O Interlock', importance: 'low', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/io-interlock-and-page-locking-in-os/' }
+      ]},
+    ]
+  },
+  {
+    id: 'u5', num: 'V', title: 'File System & Disk Scheduling', marks: 10,
+    topics: [
+      { name: 'File: Concept, Attributes, Operations', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+concept+attributes+operations+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/file-system-operating-system/' }
+      ]},
+      { name: 'File Organization: Sequential, Index-Sequential, Indexed, Direct/Hash', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+organization+sequential+indexed+direct' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/file-organizations-in-dbms/' }
+      ]},
+      { name: 'Directory Operations and Structures (Single-level, Two-level, Tree, Acyclic Graph)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=directory+structures+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/directory-structure-in-operating-system/' }
+      ]},
+      { name: 'File Protection: Access Control & Permissions', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+protection+access+control+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/file-access-methods-in-operating-system/' }
+      ]},
+      { name: 'File System Structure & Layered Design', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/structures-of-directory-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+system+structure+layers+OS' }
+      ]},
+      { name: 'File Allocation Methods: Contiguous, Linked, Indexed', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+allocation+methods+contiguous+linked+indexed' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/file-allocation-methods/' }
+      ]},
+      { name: 'Free Space Management: Bit Vector, Linked List, Grouping', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=free+space+management+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/free-space-management-in-operating-system/' }
+      ]},
+      { name: 'Disk Structure (Platters, Tracks, Sectors, Cylinders)', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=disk+structure+platters+tracks+sectors' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/magnetic-disk-structure/' }
+      ]},
+      { name: 'Disk Scheduling: FCFS', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=FCFS+disk+scheduling' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/fcfs-disk-scheduling-algorithms/' }
+      ]},
+      { name: 'Disk Scheduling: SSTF (Shortest Seek Time First)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=SSTF+disk+scheduling' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/sstf-disk-scheduling-algorithms/' }
+      ]},
+      { name: 'Disk Scheduling: SCAN & C-SCAN', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=SCAN+CSCAN+disk+scheduling' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/scan-elevator-disk-scheduling-algorithms/' }
+      ]},
+      { name: 'Disk Scheduling: LOOK Algorithm', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/look-disk-scheduling-algorithm/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=LOOK+disk+scheduling+algorithm' }
+      ]},
+      { name: 'Disk Management & Swap Space Management', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/disk-management-in-os/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=disk+management+swap+space+OS' }
+      ], extra: true},
+      { name: 'RAID: Concept, Levels (RAID 0,1,5)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=RAID+levels+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/raid-redundant-arrays-of-independent-disks/' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/RAID' }
+      ]},
+      { name: 'I/O Hardware: Buses, Controllers, Registers', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=IO+hardware+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/io-hardware-in-operating-system/' }
+      ]},
+      { name: 'Interrupts — Mechanism', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=interrupts+in+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/interrupts/' }
+      ]},
+      { name: 'DMA (Direct Memory Access)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=DMA+direct+memory+access+OS' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/direct-memory-access/' }
+      ]},
+      { name: 'Application I/O Interface & Kernel I/O Subsystem', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/application-i-o-interface-in-operating-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=application+IO+interface+kernel+IO+subsystem' }
+      ]},
+    ]
+  },
+  {
+    id: 'u6', num: 'VI', title: 'Distributed File System & Embedded OS', marks: 10,
+    topics: [
+      { name: 'Distributed File System: Concept', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=distributed+file+system+concept' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/what-is-distributed-file-system/' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Clustered_file_system' }
+      ]},
+      { name: 'Naming and Transparency in DFS', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/naming-and-transparency-in-distributed-file-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=naming+transparency+distributed+file+system' }
+      ]},
+      { name: 'Remote File Access', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=remote+file+access+distributed+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/remote-file-access-in-distributed-system/' }
+      ]},
+      { name: 'Stateful vs Stateless File Service', importance: 'imp', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/stateful-vs-stateless-file-services-in-distributed-file-systems/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=stateful+stateless+file+service+DFS' }
+      ]},
+      { name: 'File Replication in Distributed Systems', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/file-replication-in-distributed-system/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=file+replication+distributed+system' }
+      ]},
+      { name: 'Remote Login & Remote File Transfer', importance: 'mod', links: [
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/remote-login-in-distributed-systems/' },
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=remote+login+file+transfer+distributed+system' }
+      ]},
+      { name: 'Data Migration, Computation Migration, Process Migration', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=data+computation+process+migration+distributed' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/process-migration-in-distributed-system/' }
+      ]},
+      { name: 'Embedded Systems: Definition, Requirements, Constraints', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=embedded+systems+definition+requirements' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/introduction-of-embedded-systems/' }
+      ]},
+      { name: 'Organization of Embedded Systems', importance: 'mod', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=organization+of+embedded+systems' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/embedded-system-types-and-its-characteristics/' }
+      ]},
+      { name: 'Characteristics of Embedded Operating Systems', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=characteristics+embedded+operating+system' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/real-time-systems/' }
+      ]},
+      { name: 'Case Study: Linux Operating System', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=Linux+operating+system+architecture+case+study' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/linux-history/' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Linux_kernel' }
+      ]},
+      { name: 'Case Study: Mobile Operating Systems (Android/iOS)', importance: 'imp', links: [
+        { type:'yt', label:'YouTube', url:'https://www.youtube.com/results?search_query=mobile+operating+system+android+architecture' },
+        { type:'gfg', label:'GFG', url:'https://www.geeksforgeeks.org/android-architecture/' },
+        { type:'wiki', label:'Wikipedia', url:'https://en.wikipedia.org/wiki/Mobile_operating_system' }
+      ]},
+    ]
+  }
+];
+
+const linkIcons = { yt: '▶', wiki: 'W', gfg: '⚡', mit: '🎓' };
+
+function renderUnit(unit) {
+  const topicsHTML = unit.topics.map(t => {
+    const linksHTML = t.links.map(l =>
+      `<a href="${l.url}" target="_blank" rel="noopener" class="learn-link ${l.type}">${linkIcons[l.type]} ${l.label}</a>`
+    ).join('');
+
+    const badgeMap = {
+      imp: `<span class="badge imp">⭐ Important</span>`,
+      mod: `<span class="badge mod">🔵 Moderate</span>`,
+      low: `<span class="badge low">⚪ Overview</span>`
+    };
+
+    return `
+      <div class="topic-item">
+        <div class="topic-icon">${t.importance === 'imp' ? '⭐' : t.importance === 'mod' ? '🔵' : '⚪'}</div>
+        <div class="topic-body">
+          <div class="topic-name">${t.name}${t.extra ? ' <span class="bracket">[extra reading]</span>' : ''}</div>
+          <div class="topic-actions">
+            ${linksHTML}
+            <div class="topic-badge-wrap">${badgeMap[t.importance]}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="unit ${unit.id}" id="${unit.id}">
+      <div class="unit-header" onclick="toggleUnit('${unit.id}')">
+        <div class="unit-left">
+          <div class="unit-num">U${unit.num}</div>
+          <div>
+            <div class="unit-title">${unit.title}</div>
+            <div class="unit-meta">Unit ${unit.num} · ${unit.topics.length} topics</div>
+          </div>
+        </div>
+        <div class="unit-right">
+          <span class="marks-pill">10 Marks</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+      <div class="topics-list">${topicsHTML}</div>
+    </div>`;
+}
+
+document.getElementById('units-container').innerHTML = data.map(renderUnit).join('');
+
+function toggleUnit(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+let allOpen = false;
+document.getElementById('expandBtn').addEventListener('click', function() {
+  allOpen = !allOpen;
+  document.querySelectorAll('.unit').forEach(u => u.classList.toggle('open', allOpen));
+  this.textContent = allOpen ? '⊟ Collapse All Units' : '⊞ Expand All Units';
+});
+
+// Open first unit by default
+document.getElementById('u1').classList.add('open');
+
+// Search
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  document.querySelectorAll('.unit').forEach(unit => {
+    const items = unit.querySelectorAll('.topic-item');
+    let anyVisible = false;
+    items.forEach(item => {
+      const text = item.querySelector('.topic-name').textContent.toLowerCase();
+      const match = !q || text.includes(q);
+      item.style.display = match ? '' : 'none';
+      if (match) anyVisible = true;
+    });
+    if (q) {
+      unit.classList.toggle('open', anyVisible);
+      unit.style.opacity = anyVisible ? '1' : '0.3';
+    } else {
+      unit.style.opacity = '1';
+    }
+  });
+});
+</script>
+</body>
+</html>
